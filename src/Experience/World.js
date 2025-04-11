@@ -6,7 +6,6 @@ import LoupedeckButtons from './LoupedeckButtons.js'
 import CoffeeSteam from './CoffeeSteam.js'
 import TopChair from './TopChair.js'
 import ElgatoLight from './ElgatoLight.js'
-import BouncingLogo from './BouncingLogo.js'
 import Screen from './Screen.js'
 
 export default class World
@@ -66,23 +65,32 @@ export default class World
 
     setBouncingLogo()
     {
-        this.bouncingLogo = new BouncingLogo()
+        // Create video screen at the bouncing logo position
+        const videoPlane = new THREE.PlaneGeometry(4.2, 2.37, 2, 2)
+        videoPlane.rotateY(-Math.PI * 0.5)
+        const videoMesh = new THREE.Mesh(videoPlane)
+        videoMesh.position.set(4.188, 2.667, 1.830)
+        
+        this.streamScreen = new Screen(
+            videoMesh,
+            '/assets/videoStream.mp4'  // Updated path
+        )
     }
 
     setScreens()
     {
+        // TV Screen
         this.pcScreen = new Screen(
             this.resources.items.pcScreenModel.scene.children[0],
-            '/assets/videoPortfolio.mp4'
+            '/assets/videoPortfolio.mp4'  // Updated path
         )
-        this.macScreen = new Screen(
-            this.resources.items.macScreenModel.scene.children[0],
-            '/assets/videoStream.mp4'
-        )
-    }
 
-    resize()
-    {
+        // Mac Screen
+        const macScreenMesh = this.resources.items.macScreenModel.scene.children[0]
+        this.macScreen = new Screen(
+            macScreenMesh,
+            '/assets/videoMACscreen.mp4'  // Updated path
+        )
     }
 
     update()
@@ -101,6 +109,16 @@ export default class World
 
         if(this.bouncingLogo)
             this.bouncingLogo.update()
+
+        if(this.macScreen)
+            this.macScreen.update()
+
+        if(this.streamScreen)
+            this.streamScreen.update()
+    }
+
+    resize()
+    {
     }
 
     destroy()

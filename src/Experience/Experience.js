@@ -124,6 +124,10 @@ export default class Experience
     setResources()
     {
         this.resources = new Resources(assets)
+        this.resources.on('ready', () => {
+            // Hide loading screen when all resources are loaded
+            document.querySelector('.loading-screen').classList.add('hidden');
+        })
     }
 
     setWorld()

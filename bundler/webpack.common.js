@@ -5,14 +5,13 @@ const path = require('path')
 
 module.exports = {
     entry: path.resolve(__dirname, '../src/script.js'),
-    output:
-    {
+    output: {
         filename: 'bundle.[contenthash].js',
-        path: path.resolve(__dirname, '../dist')
+        path: path.resolve(__dirname, '../dist'),
+        clean: true // cleans dist folder before build
     },
     devtool: 'source-map',
-    plugins:
-    [
+    plugins: [
         new CopyWebpackPlugin({
             patterns: [
                 { from: path.resolve(__dirname, '../static') }
@@ -24,13 +23,11 @@ module.exports = {
         }),
         new MiniCSSExtractPlugin()
     ],
-    module:
-    {
-        rules:
-        [
+    module: {
+        rules: [
             // HTML
             {
-                test: /\.(html)$/,
+                test: /\.html$/,
                 use: ['html-loader']
             },
 
@@ -38,50 +35,34 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use:
-                [
-                    'babel-loader'
-                ]
+                use: ['babel-loader']
             },
 
             // CSS
             {
                 test: /\.css$/,
-                use:
-                [
+                use: [
                     MiniCSSExtractPlugin.loader,
                     'css-loader'
                 ]
             },
 
-            // Images
+            // Images (handled via Webpack 5 asset modules)
             {
-                test: /\.(jpg|png|gif|svg)$/,
-                use:
-                [
-                    {
-                        loader: 'file-loader',
-                        options:
-                        {
-                            outputPath: 'assets/images/'
-                        }
-                    }
-                ]
+                test: /\.(png|jpe?g|gif|svg)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/images/[name][ext]'
+                }
             },
 
             // Fonts
             {
-                test: /\.(ttf|eot|woff|woff2)$/,
-                use:
-                [
-                    {
-                        loader: 'file-loader',
-                        options:
-                        {
-                            outputPath: 'assets/fonts/'
-                        }
-                    }
-                ]
+                test: /\.(ttf|eot|woff2?|otf)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/fonts/[name][ext]'
+                }
             },
 
             // Shaders

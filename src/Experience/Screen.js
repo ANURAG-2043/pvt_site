@@ -32,6 +32,19 @@ export default class Screen
         this.model.element.src = this.sourcePath
         this.model.element.play()
 
+        // Add click event to the video screen
+        this.mesh.addEventListener('click', () => {
+            const link = document.createElement('a')
+            // Use absolute path or correct relative path
+            link.href = './assets/Anurag_resume@2025.pdf'  
+            link.setAttribute('download', 'Anurag_resume@2025.pdf')
+            link.setAttribute('target', '_blank')
+            link.style.display = 'none'
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        })
+
         // Texture
         this.model.texture = new THREE.VideoTexture(this.model.element)
         this.model.texture.encoding = THREE.sRGBEncoding
@@ -40,6 +53,9 @@ export default class Screen
         this.model.material = new THREE.MeshBasicMaterial({
             map: this.model.texture
         })
+
+        // Make mesh interactive
+        this.mesh.userData.clickable = true
 
         // Mesh
         this.model.mesh = this.mesh

@@ -9,18 +9,8 @@ export default class LoupedeckButtons
     {
         this.experience = new Experience()
         this.resources = this.experience.resources
-        this.debug = this.experience.debug
         this.scene = this.experience.scene
         this.time = this.experience.time
-
-        // Debug
-        if(this.debug)
-        {
-            this.debugFolder = this.debug.addFolder({
-                title: 'loupedeckButtons',
-                expanded: false
-            })
-        }
 
         this.setModel()
         this.setAnimation()
@@ -29,19 +19,13 @@ export default class LoupedeckButtons
     setModel()
     {
         this.model = {}
-
         this.model.items = []
 
-        // Children
         const children = [...this.resources.items.loupedeckButtonsModel.scene.children]
         children.sort((_a, _b) =>
         {
-            if(_a.name < _b.name)
-                return -1
-
-            if(_a.name > _b.name)
-                return 1
-
+            if(_a.name < _b.name) return -1
+            if(_a.name > _b.name) return 1
             return 0
         })
         
@@ -49,35 +33,15 @@ export default class LoupedeckButtons
         for(const _child of children)
         {
             const item = {}
-
             item.index = i
-
             item.material = new THREE.MeshBasicMaterial({
                 color: 0xffffff,
                 transparent: true
             })
-
             item.mesh = _child
             item.mesh.material = item.material
             this.scene.add(item.mesh)
-
             this.model.items.push(item)
-
-            // // Debug
-            // if(this.debug)
-            // {
-            //     this.debugFolder
-            //         .addInput(
-            //             item,
-            //             'color',
-            //             { view: 'color' }
-            //         )
-            //         .on('change', () =>
-            //         {
-            //             item.material.color.set(item.color)
-            //         })
-            // }
-
             i++
         }
     }
@@ -85,26 +49,7 @@ export default class LoupedeckButtons
     setAnimation()
     {
         this.animation = {}
-
         this.animation.colors = ['#af55cf', '#dbd85d', '#e86b24', '#b81b54']
-
-        for(const _colorIndex in this.animation.colors)
-        {
-            // Debug
-            if(this.debug)
-            {
-                this.debugFolder
-                    .addInput(
-                        this.animation.colors,
-                        _colorIndex,
-                        { view: 'color' }
-                    )
-                    // .on('change', () =>
-                    // {
-                    //     item.material.color.set(item.color)
-                    // })
-            }
-        }
 
         this.animation.play = () =>
         {
@@ -151,7 +96,6 @@ export default class LoupedeckButtons
                         }
                     }
                 )
-
                 i++
             }
         }
@@ -162,9 +106,5 @@ export default class LoupedeckButtons
 
     update()
     {
-        // for(const _item of this.model.items)
-        // {
-        //     _item.material.opacity = Math.sin(this.time.elapsed * 0.002 - _item.index * 0.5) * 0.5 + 0.5
-        // }
     }
 }
